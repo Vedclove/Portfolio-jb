@@ -1,7 +1,7 @@
 ## EAS 503 Final Project
 
 ### Video Explanation
-#### [Iris Flower Classification](https://www.youtube.com/embed/VIDEO_ID)
+#### [Iris Flower Classification](https://buffalo.box.com/v/iris-flower-classification)
 
 ### Streamlit Application
 #### [Visit the Iris Streamlit App](https://vedclove-iris.streamlit.app/)
