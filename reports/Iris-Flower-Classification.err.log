@@ -18,16 +18,65 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
+import pandas as pd
 import dagshub
-dagshub.init(repo_owner='Vedclove', repo_name='EAS-Iris', mlflow=True)
+import seaborn as sns
+import sqlite3
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from ydata_profiling import ProfileReport
+
+def create_connection(db_file, delete_db=False):
+    import os
+    if delete_db and os.path.exists(db_file):
+        os.remove(db_file)
+
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        conn.execute("PRAGMA foreign_keys = 1")
+    except Exception as e:
+        print(e)
+
+    return conn
+
+
+def create_table(conn, create_table_sql, drop_table_name=None):
+    if drop_table_name: # You can optionally pass drop_table_name to drop the table. 
+        try:
+            c = conn.cursor()
+            c.execute("""DROP TABLE IF EXISTS %s""" % (drop_table_name))
+        except Exception as e:
+            print(e)
+    
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Exception as e:
+        print(e)
+        
+def execute_sql_statement(sql_statement, conn):
+    cur = conn.cursor()
+    cur.execute(sql_statement)
+
+    rows = cur.fetchall()
+
+    return rows
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
+db_name = 'Iris_Normalized.db'
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mModuleNotFoundError[0m                       Traceback (most recent call last)
-Cell [0;32mIn[2], line 1[0m
-[0;32m----> 1[0m [38;5;28;01mimport[39;00m [38;5;21;01mdagshub[39;00m
-[1;32m      2[0m dagshub[38;5;241m.[39minit(repo_owner[38;5;241m=[39m[38;5;124m'[39m[38;5;124mVedclove[39m[38;5;124m'[39m, repo_name[38;5;241m=[39m[38;5;124m'[39m[38;5;124mEAS-Iris[39m[38;5;124m'[39m, mlflow[38;5;241m=[39m[38;5;28;01mTrue[39;00m)
+Cell [0;32mIn[1], line 2[0m
+[1;32m      1[0m [38;5;28;01mimport[39;00m [38;5;21;01mpandas[39;00m [38;5;28;01mas[39;00m [38;5;21;01mpd[39;00m
+[0;32m----> 2[0m [38;5;28;01mimport[39;00m [38;5;21;01mdagshub[39;00m
+[1;32m      3[0m [38;5;28;01mimport[39;00m [38;5;21;01mseaborn[39;00m [38;5;28;01mas[39;00m [38;5;21;01msns[39;00m
+[1;32m      4[0m [38;5;28;01mimport[39;00m [38;5;21;01msqlite3[39;00m
 
 [0;31mModuleNotFoundError[0m: No module named 'dagshub'
 
